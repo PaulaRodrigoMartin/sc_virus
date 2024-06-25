@@ -10,3 +10,4 @@ Regulatory motif analysis workflow in a single-cell setup
    ```bash
    conda activate sc_virus
    conda list
+
