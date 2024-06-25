@@ -25,4 +25,4 @@ Running the workflow in the cluster:
 ```
 
 
-add `-n` flag for a dry-run
+specify threads `-j` and `slurm_account` and add `-n` flag for a dry-run.
