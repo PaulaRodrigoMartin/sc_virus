@@ -22,6 +22,7 @@ Main workflow for `sc_virus` can be found in the snakefile. Scripts can be found
 Running the workflow in the cluster:
    ```bash
    snakemake -j 10 --slurm --default-resources slurm_account=your_account
+```
 
 
 add `-n` flag for a dry-run
