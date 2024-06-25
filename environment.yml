@@ -1,4 +1,4 @@
-name: snakemake-tutorial
+name: sc_virus
 channels:
   - anaconda
   - gwforg
