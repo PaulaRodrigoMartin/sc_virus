@@ -12,7 +12,7 @@ Regulatory motif analysis workflow in a single-cell setup
    conda list
 
 ## Running miReact
-Specify according paths in code/02run_mireact.R and run code/02run_mireact.sh in a cluster. You can see more on the tutorial on how to run miReact here: https://github.com/muhligs/miReact
+Specify according paths in `code/02run_mireact.R` and run `code/02run_mireact.sh` in a cluster. You can see more on the tutorial on how to run miReact here: https://github.com/muhligs/miReact
 
 ## Running the workflow
-Main workflow for 'sc_virus' can be found in the snakefile. Scripts can be found in 'code/flow'
+Main workflow for `sc_virus` can be found in the snakefile. Scripts can be found in `code/flow`
