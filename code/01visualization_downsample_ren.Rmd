@@ -1,0 +1,114 @@
+---
+title: "Visualization subset dataset"
+author: "Paula Rodrigo Martín"
+date: "February 6, 2024"
+output: html_document
+---
+
+```{r libraries, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(anndata)
+library(Rtsne)
+source("/faststorage/project/jsp_student_projects/sc_covid_PiB2023/miReact/code/plot.tools.R")
+```
+
+
+```{r}
+tot <- read_h5ad("/faststorage/project/jsp_student_projects/sc_covid_PiB2023/msc/data/th_mireact_downsampled_patients_viralload.h5ad") 
+efile <- readRDS("/faststorage/project/jsp_student_projects/sc_covid_PiB2023/msc/data/th_mireact_downsampled_patients.rds") #expression matrix
+annot <- read.csv("/faststorage/project/jsp_student_projects/sc_covid_PiB2023/msc/data/annotation_patients_more.csv", header = TRUE, row.names = 1)
+```
+
+
+```{r}
+table(tot$obs$typecell)
+table(tot$obs$PatientID)
+table(tot$obs$datasets)
+summary(tot$obs$Age)
+table(tot$obs$Sex)
+table(tot$obs$`Sample type`) ## condense this
+table(tot$obs$`CoVID-19 severity`)
+table(tot$obs$`SARS-CoV-2`)
+table(tot$obs$Outcome)
+table(tot$obs$sampleid)
+unique(tot$obs$patients) #this variable is only for patients who have infected cells --> i can take cells only from those patients maybe for the subset datase
+```
+#plot number of celltypes
+```{r}
+png("/faststorage/project/jsp_student_projects/sc_covid_PiB2023/msc/summary_plots/ren_typecell_pat.png", height = 600, width = 900)
+ggplot(annot, aes(typecell, fill = typecell))+
+  geom_bar(stat = "count" ) + 
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.2, size = 6) +
+  #geom_bar(aes(typecell, fill = Is_infected[which(ann$Is_infected==T)]))+
+  geom_bar(data = subset(annot, Is_infected == TRUE),
+           aes(typecell, fill = "Infected"),  # Adjust the fill as needed
+           stat = "count",  # Border color of the bars
+           fill = "gray30") +
+  #scale_fill_manual(values = c("gray30", rep("white", length(unique(ann$typecell)) - 1))) + 
+  theme_classic()+
+  ylab("Count")+
+  xlab("")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 19), axis.text.y = element_text(angle = 90, vjust = 0.5, hjust=1, size = 19), axis.title.y = element_text(size = 17),
+        legend.text = element_text(size = 17),  # Adjust the size parameter for legend text
+        legend.title = element_text(size = 17),  # Adjust the size parameter for the legend title
+        legend.key.size = unit(1, "cm"), 
+        legend.position="right")
+dev.off()
+```
+
+Also do cells per patients, number of infected, etc...
+
+tsne of obs$patientID cluster
+```{r}
+f <- as.matrix(tot$X)
+tsne_out <- Rtsne(f)
+tsne_plot <- data.frame(x = tsne_out$Y[,1], 
+                        y = tsne_out$Y[,2])
+ 
+# Plotting the plot using ggplot() function
+ggplot2::ggplot(tsne_plot,label=Species) 
+                + geom_point(aes(x=x,y=y))
+png("/faststorage/project/jsp_student_projects/sc_covid_PiB2023/msc/summary_plots/tsne_celltype.png", height = 600, width = 900)
+
+dev.off()
+```
+
+PCA coordinates
+```{r}
+ggplot(as.data.frame(pilot_ds$obsm), aes(x = pilot_ds$obsm$X_pca[,1], y = pilot_ds$obsm$X_pca[,2], color = pilot_ds$obs$PatientID)) +
+  geom_point()+
+  theme_classic()+
+  scale_color_manual(values=my_palette)+
+  # geom_jitter(aes( color = a$PatientID))+
+  xlab("PCA1") + ylab("PCA2")+
+  labs(color="Cell type")
+
+plot(ann_train$tsne1[order(hu_train["TCTATGA",],decreasing = F)], ann_train$tsne2[order(hu_train["TCTATGA",],decreasing = F)],
+     col=colorme(hu_train["TCTATGA",], ramp = c("deepskyblue2", "white", "darkred"),
+                 numcol=99, quantcol=F)[order(hu_train["TCTATGA",])], pch=20, cex=1.5,
+     xlab="", ylab="", axes=F, main="hsa-miR-376a-3p")
+setKey(colorRampPalette(c("deepskyblue2", "white", "darkred"))(99), title="",
+       pos=c(-0.05,0.06), label=c("low", "", "high"), height=0.05, keylength = 0.25)
+
+my_palette <- c("#7570b3", "#66a61e", "#e6ab02", "#a6761d", "#666666","#1b9e77", "#d95f02", "#e7298a")
+ggplot(ann_train, aes(x = ann_train$tsne1, y = ann_train$tsne2, color = ann_train$cellgrand)) +
+  geom_point()+
+  theme_void()+
+  scale_color_manual(values=my_palette)+
+  # geom_jitter(aes( color = a$PatientID))+
+  xlab("tsne1") + ylab("tsne2")+
+  labs(color="Infection")
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

@@ -1,5 +1,3 @@
-#Snakefile, place in 
-
 CELLTYPES = ["Secretory","Macro","T","DC","Ciliated","Neu", "NK","Plasma","Squamous", "Mono"]
 HYPOTHESES = ["hypo1","hypo2", "hypo3"]
 EPITHELIAL = ["Secretory","Ciliated","Squamous"]
