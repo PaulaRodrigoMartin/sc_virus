@@ -6,3 +6,7 @@ Regulatory motif analysis workflow in a single-cell setup
 2. Create the conda environment running the following:
    ```bash
    conda env create -f environment.yaml
+3. Activate the environment and check the installation
+   ```bash
+   conda activate sc_virus
+   conda list
