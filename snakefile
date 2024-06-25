@@ -7,14 +7,14 @@ EPITHELIAL = ["Secretory","Ciliated","Squamous"]
 
 rule all:
     input:
-        # expand("log/longermer_upreg_filtered_{celltype}.rds", celltype = CELLTYPES),
-        # expand("log/longermer_downreg_filtered_{celltype}.rds", celltype = CELLTYPES),
-        # expand("res/filtered_7mers_hypo1_{celltype}.rds", celltype = CELLTYPES),
-        # expand("res/filtered_7mers_hypo2_{celltype}.rds", celltype = CELLTYPES),
-        # expand("res/filtered_7mers_hypo3_{celltype}.rds", celltype = CELLTYPES),
-        # expand("res/filtered_table_hypo1_{celltype}.png", celltype = CELLTYPES),
-        # expand("res/filtered_table_hypo2_{celltype}.png", celltype = CELLTYPES),
-        # expand("res/filtered_table_hypo3_{celltype}.png", celltype = CELLTYPES),
+        expand("log/longermer_upreg_filtered_{celltype}.rds", celltype = CELLTYPES),
+        expand("log/longermer_downreg_filtered_{celltype}.rds", celltype = CELLTYPES),
+        expand("res/filtered_7mers_hypo1_{celltype}.rds", celltype = CELLTYPES),
+        expand("res/filtered_7mers_hypo2_{celltype}.rds", celltype = CELLTYPES),
+        expand("res/filtered_7mers_hypo3_{celltype}.rds", celltype = CELLTYPES),
+        expand("res/filtered_table_hypo1_{celltype}.png", celltype = CELLTYPES),
+        expand("res/filtered_table_hypo2_{celltype}.png", celltype = CELLTYPES),
+        expand("res/filtered_table_hypo3_{celltype}.png", celltype = CELLTYPES),
         # expand("res/common_7mers_{hypo}.rds", hypo=HYPOTHESES),
         # expand("summary_plots/plots_{hypo}_{celltype}.pdf", hypo=HYPOTHESES, celltype = CELLTYPES),
         # expand("res/venn_7mers_{hypo}.rds", hypo = HYPOTHESES),
@@ -348,69 +348,6 @@ rule annot_long:
 	"""
 #########################################################
 
-# ## Merge all ranked lists and rank them based on abundancy among celltypes and among mean rank
-# rule analysis_hypo1:
-#     input:
-#         celltypes_f = expand("res/ranked_7mers_hypo1_{celltype}.rds", celltype = CELLTYPES),
-#         mir_annotations =  "data/humir.rds",
-#         rbp_annot = "data/rbps_geneyeo.RDS",
-#         occurrences = "data/hs.seqXmot.counts.utr3_mrs_7mer.rds",
-#         sars = "data/EPI_ISL_402124.fasta",
-#         script_analysis = "code/flow/analysis1.R"
-#     output:
-#         analysiss = "res/candidates_hypo1.rds",
-#         analysiss1 = "res/candidates_hypo1_abundant.rds"
-#     threads:
-#         8
-#     resources:
-#         mem_mb = 100000,
-#         runtime = 540
-#     shell:"""
-# 	Rscript {input.script_analysis} {input.celltypes_f} {input.mir_annotations} {input.rbp_annot} {input.occurrences} {input.sars} {output.analysiss} {output.analysiss1}
-# 	"""
-
-# rule analysis_hypo2:
-#     input:
-#         celltypes_f = expand("res/ranked_7mers_hypo2_{celltype}.rds", celltype = CELLTYPES),
-#         mir_annotations =  "data/humir.rds",
-#         rbp_annot = "data/rbps_geneyeo.RDS",
-#         occurrences = "data/hs.seqXmot.counts.utr3_mrs_7mer.rds",
-#         sars = "data/EPI_ISL_402124.fasta",
-#         script_analysis = "code/flow/analysis2.R"
-#     output:
-#         analysiss = "res/candidates_hypo2.rds",
-#         analysiss1 = "res/candidates_hypo2_abundant.rds"
-#     threads:
-#         8
-#     resources:
-#         mem_mb = 100000,
-#         runtime = 540
-#     shell:"""
-# 	Rscript {input.script_analysis} {input.celltypes_f} {input.mir_annotations} {input.rbp_annot} {input.occurrences} {input.sars} {output.analysiss} {output.analysiss1}
-# 	"""
-
-# rule analysis_hypo3:
-#     input:
-#         celltypes_f = expand("res/ranked_7mers_hypo3_{celltype}.rds", celltype = CELLTYPES),
-#         mir_annotations =  "data/humir.rds",
-#         rbp_annot = "data/rbps_geneyeo.RDS",
-#         occurrences = "data/hs.seqXmot.counts.utr3_mrs_7mer.rds",
-#         sars = "data/EPI_ISL_402124.fasta",
-#         script_analysis = "code/flow/analysis3.R"
-#     output:
-#         analysiss = "res/candidates_hypo3.rds",
-#         analysiss1 = "res/candidates_hypo3_abundant.rds"
-#     threads:
-#         8
-#     resources:
-#         mem_mb = 100000,
-#         runtime = 540
-#     shell:"""
-# 	Rscript {input.script_analysis} {input.celltypes_f} {input.mir_annotations} {input.rbp_annot} {input.occurrences} {input.sars} {output.analysiss} {output.analysiss1}
-# 	"""
-
-
-
 
 # rule to make celltype specific summary stats --> distrib pvals, etc
 rule summ_stats:
@@ -427,22 +364,3 @@ rule summ_stats:
     shell:"""
 	Rscript {input.script_sumstats_annot} {input.celltype} {output.cellannot3}
 	"""
-
-# rule analyze_sep:
-#     input:
-#         rank1 = "log/ranked_7mers_hypo1_{celltype}.rds",
-#         rank2 = "log/ranked_7mers_hypo2_{celltype}.rds",
-#         rank3 = "log/ranked_7mers_hypo3_{celltype}.rds",
-#         script_filtering = "code/flow/ana.r"
-#     output:
-#         fig1 = "log/fig_7mers_hypo1_{celltype}.pdf",
-#         fig2 = "log/fig_7mers_hypo2_{celltype}.pdf",
-#         fig3 = "log/fig_7mers_hypo3_{celltype}.pdf"
-#     threads:
-#         8
-#     resources:
-#         mem_mb = 100000,
-#         runtime = 600
-#     shell:"""
-# 	Rscript {input.script_filtering} {input.celltypesss} {output.rank1} {output.rank2} {output.rank3}
-# 	"""
